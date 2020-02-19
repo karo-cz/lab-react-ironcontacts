@@ -44,17 +44,21 @@ class Contacts extends Component {
 
   randomContact = () => {
     let index = Math.floor(Math.random() * contacts.length);
-    let newContact = contacts[index];
 
-    this.state.firstFive.forEach(contact => {
-      if (contact.id === newContact.id) {
-        let index = Math.floor(Math.random() * contacts.length);
-        newContact = contacts[index];
+    let found;
+    while (!found && this.state.firstFive.length < contacts.length) {
+      let random = contacts[index];
+      const alreadyExisting = this.state.firstFive.find(contact => {
+        return contact.id === random.id;
+      });
+
+      if (!alreadyExisting) {
+        found = random;
       }
-      return newContact;
-    });
 
-    this.setState({ firstFive: [...this.state.firstFive, newContact] });
+      // const contactsCopy = [...this.state.contacts]
+      this.setState({ firstFive: [...this.state.firstFive, random] });
+    }
   };
 
   sortName = () => {
@@ -74,9 +78,6 @@ class Contacts extends Component {
   };
 
   delete = props => {
-    // contact.id --> index within firstFive
-    // splice(index, 1)
-    // const filteredArr = this.state.firstFive.filter()
     let copiedState = [...this.state.firstFive];
 
     let index;
